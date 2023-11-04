@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ObrasReport" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+    <queryString>
+        <![CDATA[SELECT o.nome AS obra, e.nome AS engenheiro, o.data_inicio, o.data_fim, o.localizacao FROM obra o INNER JOIN engenheiro e ON o.id_engenheiro = e.id_engenheiro]]>
+    </queryString>
+    <field name="obra" class="java.lang.String"/>
+    <field name="engenheiro" class="java.lang.String"/>
+    <field name="data_inicio" class="java.util.Date"/>
+    <field name="data_fim" class="java.util.Date"/>
+    <field name="localizacao" class="java.lang.String"/>
+    <variable name="dataAtual" class="java.util.Date" resetType="Report">
+        <variableExpression><![CDATA[new java.util.Date()]]></variableExpression>
+    </variable>
+    <variable name="progresso" class="java.lang.Double" calculation="NoSum">
+        <variableExpression><![CDATA[((($V{dataAtual}.getTime() - $F{data_inicio}.getTime()) >= 0) ? ((($V{dataAtual}.getTime() - $F{data_inicio}.getTime()) / ($F{data_fim}.getTime() - $F{data_inicio}.getTime())) * 100) : 0)]]></variableExpression>
+    </variable>
+    <title>
+        <band height="60">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30" forecolor="#333333"/>
+                <text><![CDATA[Relatório de Obras]]></text>
+            </staticText>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="0" width="100" height="30" forecolor="#333333"/>
+                <text><![CDATA[Obra]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="100" y="0" width="100" height="30" forecolor="#333333"/>
+                <text><![CDATA[Engenheiro]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="200" y="0" width="80" height="30" forecolor="#333333"/>
+                <text><![CDATA[Data Início]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="280" y="0" width="80" height="30" forecolor="#333333"/>
+                <text><![CDATA[Data Término]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="360" y="0" width="80" height="30" forecolor="#333333"/>
+                <text><![CDATA[Localização]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="440" y="0" width="115" height="30" forecolor="#333333"/>
+                <text><![CDATA[Progresso (%)]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="30">
+            <textField>
+                <reportElement x="0" y="0" width="100" height="30"/>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{obra}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="100" y="0" width="100" height="30"/>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{engenheiro}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="200" y="0" width="80" height="30"/>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{data_inicio})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="280" y="0" width="80" height="30"/>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{data_fim})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="360" y="0" width="80" height="30"/>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{localizacao}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="440" y="0" width="115" height="30"/>
+                <textElement>
+                    <font isBold="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{progresso}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+</jasperReport>

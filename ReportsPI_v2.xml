@@ -1,0 +1,55 @@
+<!-- JRXML para relatório de tarefas do projeto -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="ProjetoTarefasReport"
+              pageWidth="595"
+              pageHeight="842"
+              columnWidth="555"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20">
+    <queryString>
+        <![CDATA[SELECT t.Nome AS tarefa, t.Descricao AS descricao, t.Data_Inicio AS data_inicio,
+                   t.Data_Fim AS data_fim, rcp.Prevista AS prevista, rcp.Executada AS executada, rcp.Status AS status
+          FROM Tarefas t
+          INNER JOIN Relacionamento_Cronograma_Tarefas_Pertence rcp ON t.ID_Tarefa = rcp.fk_Tarefas_ID_Tarefa
+          WHERE rcp.fk_Projeto_ID_Projeto = $P{projetoId}]]>
+    </queryString>
+    <field name="tarefa" class="java.lang.String"/>
+    <field name="descricao" class="java.lang.String"/>
+    <field name="data_inicio" class="java.util.Date"/>
+    <field name="data_fim" class="java.util.Date"/>
+    <field name="prevista" class="java.lang.Double"/>
+    <field name="executada" class="java.lang.Double"/>
+    <field name="status" class="java.lang.Double"/>
+    <parameter name="projetoId" class="java.lang.Integer"/>
+    <!-- Definir variáveis para cálculo do progresso -->
+    <variable name="dataAtual" class="java.util.Date" resetType="Report">
+        <variableExpression><![CDATA[new java.util.Date()]]></variableExpression>
+    </variable>
+    <variable name="progresso" class="java.lang.Double" calculation="NoSum">
+        <variableExpression><![CDATA[((($V{dataAtual}.getTime() - $F{data_inicio}.getTime()) >= 0) ? ((($V{dataAtual}.getTime() - $F{data_inicio}.getTime()) / ($F{data_fim}.getTime() - $F{data_inicio}.getTime())) * 100) : 0)]]></variableExpression>
+    </variable>
+    <title>
+        <band height="60">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="30" forecolor="#333333"/>
+                <text><![CDATA[Relatório de Tarefas do Projeto]]></text>
+            </staticText>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="30">
+            <!-- cabecalho das colunas -->
+            
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="30">
+            
+            <!-- ... (campos e dados do relatorio aqui) ... -->
+        </band>
+    </detail>
+</jasperReport>
